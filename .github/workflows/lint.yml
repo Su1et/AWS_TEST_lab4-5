@@ -1,0 +1,28 @@
+name: Lint HTML/CSS
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint HTML
+        run: npx htmlhint "html_css/**/*.html"
+
+      - name: Lint CSS
+        run: npx stylelint "html_css/**/*.css"
