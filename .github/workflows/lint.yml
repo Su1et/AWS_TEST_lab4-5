@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - uses: actions/checkout@v3
 
       - name: Setup Node.js
@@ -19,14 +18,17 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      - name: Install project dependencies
         run: npm install
 
       - name: Install htmlhint globally
         run: npm install -g htmlhint
 
+      - name: Install stylelint globally
+        run: npm install -g stylelint stylelint-config-standard
+
       - name: Lint HTML
         run: htmlhint "html_css/**/*.html"
 
       - name: Lint CSS
-        run: npx stylelint "html_css/**/*.css"
+        run: stylelint "html_css/**/*.css"
