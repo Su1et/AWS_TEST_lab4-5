@@ -22,8 +22,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Install htmlhint globally
+        run: npm install -g htmlhint
+
       - name: Lint HTML
-        run: npx htmlhint "html_css/**/*.html"
+        run: htmlhint "html_css/**/*.html"
 
       - name: Lint CSS
         run: npx stylelint "html_css/**/*.css"
