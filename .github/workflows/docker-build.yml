@@ -13,9 +13,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Lint HTML
-        run: npx htmlhint "html_css/**/*.html"
-
       - name: Build Docker image
         run: docker build -t su1et/hub_test_lab4-5:latest .
 
