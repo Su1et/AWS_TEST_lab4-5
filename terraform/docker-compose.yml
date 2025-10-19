@@ -1,0 +1,11 @@
+version: '3.9'
+
+services:
+  web:
+    image: nginx:latest
+    container_name: LAB6
+    ports:
+      - "80:80"
+    volumes:
+      - ./html_css:/usr/share/nginx/html:ro
+    restart: always # Перезапуск у разі падіння контейнера

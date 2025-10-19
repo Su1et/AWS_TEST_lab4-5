@@ -1,6 +1,3 @@
-FROM nginx:latest
-
-COPY index.html /usr/share/nginx/html/index.html
-COPY style.css /usr/share/nginx/html/style.css
-
+FROM nginx:alpine
+COPY ./html_css /usr/share/nginx/html
 EXPOSE 80
