@@ -53,23 +53,68 @@ resource "aws_instance" "app_instance" {
 
   user_data = <<-EOF
               #!/bin/bash
+              exec > >(tee /var/log/user-data.log)
+              exec 2>&1
+
+              echo "=== Starting user-data script at $(date) ==="
+
+              echo "Updating system packages..."
               sudo yum update -y
+
+              echo "Installing Docker..."
               sudo yum install docker -y
               sudo service docker start
               sudo systemctl enable docker
 
+              echo "Waiting for Docker to be ready..."
               sleep 5
 
+              # Перевірка статусу Docker
+              sudo systemctl status docker
+
+              echo "Attempting to pull Docker image su1et/hub_test_lab4-5:latest..."
+              for i in {1..15}; do
+                echo "Pull attempt $i/15..."
+                if sudo docker pull su1et/hub_test_lab4-5:latest; then
+                  echo "Successfully pulled image at $(date)"
+                  break
+                fi
+                echo "Pull failed, retrying in 20 seconds..."
+                sleep 20
+              done
+
+              echo "Starting application container..."
               sudo docker run -d --name lab6 -p 80:80 su1et/hub_test_lab4-5:latest
 
+              if [ $? -eq 0 ]; then
+                echo "Container 'lab6' started successfully at $(date)"
+                sudo docker ps
+              else
+                echo "ERROR: Container failed to start at $(date)"
+                sudo docker logs lab6
+                exit 1
+              fi
+
+              echo "Waiting for container to stabilize..."
               sleep 10
 
+              echo "Starting Watchtower for auto-updates..."
               sudo docker run -d \
                 --name watchtower \
                 -v /var/run/docker.sock:/var/run/docker.sock \
                 containrrr/watchtower \
                 --interval 300 \
                 lab6
+
+              if [ $? -eq 0 ]; then
+                echo "Watchtower started successfully at $(date)"
+              else
+                echo "WARNING: Watchtower failed to start"
+              fi
+
+              echo "=== User-data script completed at $(date) ==="
+              echo "=== Final container status ==="
+              sudo docker ps -a
               EOF
 
   tags = {

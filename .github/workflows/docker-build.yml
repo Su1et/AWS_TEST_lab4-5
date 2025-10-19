@@ -21,6 +21,20 @@ jobs:
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
           docker push su1et/hub_test_lab4-5:latest
 
+      - name: Wait for Docker Hub propagation
+        run: sleep 30
+
+      - name: Verify Docker image availability
+        run: |
+          for i in {1..10}; do
+            if docker manifest inspect su1et/hub_test_lab4-5:latest > /dev/null 2>&1; then
+              echo "Image is available on Docker Hub"
+              break
+            fi
+            echo "Waiting for image... attempt $i/10"
+            sleep 10
+          done
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
