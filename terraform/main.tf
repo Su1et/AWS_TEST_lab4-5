@@ -56,11 +56,15 @@ resource "aws_instance" "app_instance" {
               sudo yum update -y
               sudo yum install docker -y
               sudo service docker start
-              sudo usermod -aG docker ec2-user
+              sudo systemctl enable docker
 
-              docker run -d --name lab6 -p 80:80 su1et/hub_test_lab4-5:latest
+              sleep 5
 
-              docker run -d \
+              sudo docker run -d --name lab6 -p 80:80 su1et/hub_test_lab4-5:latest
+
+              sleep 10
+
+              sudo docker run -d \
                 --name watchtower \
                 -v /var/run/docker.sock:/var/run/docker.sock \
                 containrrr/watchtower \
