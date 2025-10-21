@@ -16,7 +16,7 @@ terraform {
   backend "s3" {
     bucket         = "terraform-state-lab6-serhii-2025"
     key            = "lab6/terraform.tfstate"
-    region         = var.aws_region
+    region         = "eu-north-1"
     encrypt        = true
   }
 }
