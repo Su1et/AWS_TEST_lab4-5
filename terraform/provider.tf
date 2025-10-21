@@ -11,3 +11,12 @@ terraform {
 provider "aws" {
   region = var.aws_region
 }
+
+terraform {
+  backend "s3" {
+    bucket         = "terraform-state-lab6-serhii-2025"
+    key            = "lab6/terraform.tfstate"
+    region         = var.aws_region
+    encrypt        = true
+  }
+}
