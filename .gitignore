@@ -8,7 +8,8 @@
 *.tfstate
 *.tfstate.backup
 *.tfvars
-.terraform.lock.hcl
+# Don’t ignore lock file
+!.terraform.lock.hcl
 
 # Ignore IDE files
 .idea/
