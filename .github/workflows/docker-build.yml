@@ -22,7 +22,7 @@ jobs:
           docker push su1et/hub_test_lab4-5:latest
 
       - name: Wait for Docker Hub propagation
-        run: sleep 30
+        run: sleep 5
 
       - name: Verify Docker image availability
         run: |
