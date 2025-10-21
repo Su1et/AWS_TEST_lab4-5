@@ -46,7 +46,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           cd terraform
-          terraform init
+          terraform init -input=false -migrate-state
 
       - name: Terraform Destroy old infra
         continue-on-error: true
